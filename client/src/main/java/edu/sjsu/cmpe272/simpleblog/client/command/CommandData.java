@@ -8,7 +8,7 @@ public class CommandData {
 
     @Setter
     @Getter
-    public static class Data {
+    public abstract static class Data {
     }
 
     @Setter

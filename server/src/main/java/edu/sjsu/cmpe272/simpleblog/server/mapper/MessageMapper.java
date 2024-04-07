@@ -3,7 +3,7 @@ package edu.sjsu.cmpe272.simpleblog.server.mapper;
 import edu.sjsu.cmpe272.simpleblog.server.dto.MessageDTO;
 import edu.sjsu.cmpe272.simpleblog.server.model.Message;
 import edu.sjsu.cmpe272.simpleblog.server.model.UserDetails;
-import edu.sjsu.cmpe272.simpleblog.server.service.MessageService;
+import edu.sjsu.cmpe272.simpleblog.server.service.MessageServiceImpl;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -18,11 +18,11 @@ public interface MessageMapper {
     Message mapToMessage(MessageDTO.CreateRequest request, UserDetails user);
 
     @Mapping(target = "messageId", source = "msgId")
-    MessageDTO.CreateResponse  mapToCreateResponse(Integer msgId);
+    MessageDTO.CreatedResponse mapToCreatedResponse(Integer msgId);
 
     @Mapping(source = "limit", target = "limit")
     @Mapping(source = "next", target = "next")
-    MessageService.Pagination mapToPagination(MessageDTO.ListRequest request);
+    MessageServiceImpl.Pagination mapToPagination(MessageDTO.PaginatedRequest request);
 
     @Mapping(target = "date", source = "sentOn")
     @Mapping(target = "messageId", source = "msgId")
@@ -30,5 +30,5 @@ public interface MessageMapper {
     @Mapping(target = "message", source = "message")
     @Mapping(target = "attachment", source = "attachment")
     @Mapping(target = "signature", source = "signature")
-    MessageDTO.ListResponse mapToListResponse(Message msg);
+    MessageDTO.PaginatedResponse mapToPaginatedResponse(Message msg);
 }

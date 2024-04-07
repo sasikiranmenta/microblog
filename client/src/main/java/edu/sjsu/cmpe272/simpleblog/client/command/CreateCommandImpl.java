@@ -1,8 +1,14 @@
 package edu.sjsu.cmpe272.simpleblog.client.command;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.ini4j.Wini;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +17,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CreateCommandImpl implements ClientCommand<CommandData.Create> {
 
     private final KeyPairGenerator rsaKeyPairGenerator;
@@ -45,10 +51,11 @@ public class CreateCommandImpl implements ClientCommand<CommandData.Create> {
         if (response.getStatusCode().is2xxSuccessful()) {
             storeKey(data.id, Base64.getEncoder().encodeToString(rsaPair.getPrivate().getEncoded()));
         }
+        log.info("Successfully created user: {}", data.getId());
     }
 
     private void storeKey(String id, String privateKey) throws IOException {
-        File file = new File("md.ini");
+        File file = new File("mb.ini");
         if (file.createNewFile()) {
             Wini ini = new Wini(file);
             ini.put("blog", "private_key", privateKey);
@@ -59,6 +66,7 @@ public class CreateCommandImpl implements ClientCommand<CommandData.Create> {
 
     @Getter
     @Setter
+    @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class CreateResponse {
         String message;
     }
