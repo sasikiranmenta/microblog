@@ -54,8 +54,8 @@ public class PostCommandImpl implements ClientCommand<CommandData.Post> {
         CreateRequest request = CreateRequest.builder()
                 .date(new Date())
                 .author(id)
-                .message(data.message)
-                .attachment(getEncodedData(data.fileName))
+                .message(data.getMessage())
+                .attachment(getEncodedData(data.getFileName()))
                 .build();
 
         request.setSignature(calculateSignature(request, privateKey));

@@ -49,7 +49,7 @@ public class CreateCommandImpl implements ClientCommand<CommandData.Create> {
 
         ResponseEntity<String> response = restTemplate.postForEntity(blogHost + "/user/create", createRequest, String.class);
         if (response.getStatusCode().is2xxSuccessful()) {
-            storeKey(data.id, Base64.getEncoder().encodeToString(rsaPair.getPrivate().getEncoded()));
+            storeKey(data.getId(), Base64.getEncoder().encodeToString(rsaPair.getPrivate().getEncoded()));
         }
         log.info("Successfully created user: {}", data.getId());
     }
