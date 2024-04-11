@@ -64,15 +64,20 @@ public class ListCommandImpl implements ClientCommand<CommandData.List> {
 
     @SneakyThrows
     private void printMessageAndSaveAttachment(ListResponse response) {
-        saveAttachment(response.getAttachment(), "message-" + response.getMessageId() + ".out");
+        if (response.getAttachment() != null) {
+            saveAttachment(response.getAttachment(), "message-" + response.getMessageId() + ".out");
+        }
         printMessage(response);
     }
 
     private void saveAttachment(String encodedData, String fileName) throws IOException {
-        byte[] data = Base64.getDecoder().decode(encodedData);
-        File file = new File(fileName);
-        try (FileOutputStream outputStream = new FileOutputStream(file)) {
-            outputStream.write(data);
+
+        if (fileName != null) {
+            byte[] data = Base64.getDecoder().decode(encodedData);
+            File file = new File(fileName);
+            try (FileOutputStream outputStream = new FileOutputStream(file)) {
+                outputStream.write(data);
+            }
         }
     }
 
