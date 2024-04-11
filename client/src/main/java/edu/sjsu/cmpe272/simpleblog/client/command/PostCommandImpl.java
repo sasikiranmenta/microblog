@@ -26,6 +26,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 
@@ -52,7 +53,7 @@ public class PostCommandImpl implements ClientCommand<CommandData.Post> {
         String id = ini.get("blog", "id", String.class);
         String privateKey = ini.get("blog", "private_key", String.class);
         CreateRequest request = CreateRequest.builder()
-                .date(new Date())
+                .date(currentDateStr())
                 .author(id)
                 .message(data.getMessage())
                 .attachment(getEncodedData(data.getFileName()))
@@ -96,6 +97,11 @@ public class PostCommandImpl implements ClientCommand<CommandData.Post> {
         return Base64.getEncoder().encodeToString(fileContent);
     }
 
+    private String currentDateStr() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmXXX");
+        return formatter.format(new Date());
+    }
+
     @SneakyThrows
     private String calculateSignature(CreateRequest request, String privateKeyStr) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -110,7 +116,7 @@ public class PostCommandImpl implements ClientCommand<CommandData.Post> {
 
     private String generateSignaturePayload(CreateRequest request) {
         String payload = "";
-        payload += request.getDate().toString();
+        payload += request.getDate();
         payload += request.getAuthor();
         payload += request.getMessage();
         if(request.getAttachment() != null) {
@@ -143,7 +149,7 @@ public class PostCommandImpl implements ClientCommand<CommandData.Post> {
     @Builder
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class CreateRequest {
-        Date date;
+        String date;
         String author;
         String message;
         String attachment;

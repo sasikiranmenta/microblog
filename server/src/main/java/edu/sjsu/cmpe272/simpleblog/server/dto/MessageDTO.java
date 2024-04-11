@@ -9,17 +9,17 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
+import lombok.ToString;
 
 public class MessageDTO {
 
     @Getter
     @Setter
+    @ToString
     public static class CreateRequest {
         @NotNull(message = "Date cannot be empty")
         @SignatureOrder(order = 1)
-        Date date;
+        String date;
 
         @NotBlank(message = "Author cannot be empty")
         @SignatureOrder(order = 2)

@@ -21,9 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -79,9 +77,7 @@ public class ListCommandImpl implements ClientCommand<CommandData.List> {
     }
 
     private void printMessage(ListResponse response) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmXXX");
-        String strDate = formatter.format(response.date);
-        String message = String.format("%s: %s %s says \"%s\"", response.getMessageId(), strDate, response.getAuthor(), response.getMessage());
+        String message = String.format("%s: %s %s says \"%s\"", response.getMessageId(), response.getDate(), response.getAuthor(), response.getMessage());
         if (response.getAttachment() != null) {
             message += " \uD83D\uDCCE";
         }
@@ -98,7 +94,7 @@ public class ListCommandImpl implements ClientCommand<CommandData.List> {
     public static class ListResponse {
         @JsonAlias("message-id")
         int messageId;
-        Date date;
+        String date;
         String author;
         String message;
         String attachment;
